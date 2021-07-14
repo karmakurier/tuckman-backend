@@ -2,15 +2,15 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Room {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    roomQuestionnaireId: string;
+  @Column()
+  roomQuestionnaireId: string;
 
-    @Column()
-    roomResultsId: string;
+  @Column()
+  roomResultsId: string;
 
-    @Column()
-    teamName: string;
+  @Column()
+  teamName: string;
 }

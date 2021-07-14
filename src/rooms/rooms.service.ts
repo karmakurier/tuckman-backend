@@ -5,17 +5,16 @@ import { Room } from './room.entity';
 
 @Injectable()
 export class RoomsService {
+  constructor(
+    @InjectRepository(Room)
+    private questionsRepository: Repository<Room>,
+  ) {}
 
-    constructor(
-        @InjectRepository(Room)
-        private questionsRepository: Repository<Room>,
-    ) { }
+  findAll(): Promise<Room[]> {
+    return this.questionsRepository.find();
+  }
 
-    findAll(): Promise<Room[]> {
-        return this.questionsRepository.find();
-    }
-
-    findOne(id: string): Promise<Room> {
-        return this.questionsRepository.findOne(id);
-    }
+  findOne(id: string): Promise<Room> {
+    return this.questionsRepository.findOne(id);
+  }
 }

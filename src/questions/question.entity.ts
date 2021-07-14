@@ -1,15 +1,24 @@
 import { QuestionResult } from 'src/database/entities/questionResult.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 import { Questionnaire } from '../questionnaires/questionnaire.entity';
 
 @Entity()
 export class Question {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    questionString: string;
+  @Column()
+  questionString: string;
 
-    @OneToMany(type => QuestionResult, questionresult => questionresult.question)
-    questionResult: QuestionResult;
+  @OneToMany(
+    (type) => QuestionResult,
+    (questionresult) => questionresult.question,
+  )
+  questionResult: QuestionResult;
 }

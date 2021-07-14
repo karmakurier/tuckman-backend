@@ -5,8 +5,8 @@ import { RoomsController } from './rooms.controller';
 import { RoomsService } from './rooms.service';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Room])],
-    providers: [RoomsService],
-    controllers: [RoomsController],
+  imports: [TypeOrmModule.forFeature([Room])],
+  providers: [RoomsService],
+  controllers: [RoomsController],
 })
-export class RoomsModule { }
+export class RoomsModule {}

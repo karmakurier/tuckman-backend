@@ -4,10 +4,12 @@ import { QuestionResult } from './questionResult.entity';
 
 @Entity()
 export class QuestionnaireResult {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @PrimaryGeneratedColumn()
-    id: number;
-
-    @OneToMany(type => QuestionResult, questionresult => questionresult.questionnair)
-    QuestionResults: QuestionResult[];
+  @OneToMany(
+    (type) => QuestionResult,
+    (questionresult) => questionresult.questionnair,
+  )
+  QuestionResults: QuestionResult[];
 }

@@ -3,13 +3,10 @@ import { QuestionsService } from './questions.service';
 
 @Controller('questions')
 export class QuestionsController {
+  constructor(private questionService: QuestionsService) {}
 
-    constructor(private questionService: QuestionsService) {
-
-    }
-
-    @Get()
-    async findAll() {
-        return await this.questionService.findAll();
-    }
+  @Get()
+  async findAll() {
+    return await this.questionService.findAll();
+  }
 }
