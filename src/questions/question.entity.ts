@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { QuestionResult } from 'src/database/entities/questionResult.entity';
 import {
   Entity,

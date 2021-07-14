@@ -11,6 +11,7 @@ import { QuestionnaireResult } from './database/entities/questionnaireresult.ent
 import { Room } from './rooms/room.entity';
 import { QuestionsModule } from './questions/questions.module';
 import { RoomsModule } from './rooms/rooms.module';
+import { QuestionnairesModule } from './questionnaires/questionnaire.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { RoomsModule } from './rooms/rooms.module';
     }),
     QuestionsModule,
     RoomsModule,
+    QuestionnairesModule,
   ],
   controllers: [AppController, ResultsController],
   providers: [AppService],
