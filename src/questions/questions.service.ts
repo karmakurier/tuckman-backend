@@ -17,4 +17,22 @@ export class QuestionsService {
   findOne(id: string): Promise<Question> {
     return this.questionsRepository.findOne(id);
   }
+
+  updateOne(id: string, question: Question) {
+    if (this.questionsRepository.findOne(id)) {
+      return this.questionsRepository.save(question);
+    } else {
+      return new Promise((resolve, reject) => {
+        reject();
+      });
+    }
+  }
+
+  createOne(question: Question) {
+    return this.questionsRepository.create(question);
+  }
+
+  async remove(id: number): Promise<void> {
+    await this.questionsRepository.delete(id);
+  }
 }

@@ -13,4 +13,19 @@ export class Room {
 
   @Column()
   teamName: string;
+
+  @Column()
+  notes: string;
+
+  @Column()
+  initiatorEmail: string;
+
+  @Column()
+  expiresAt: Date;
+
+  @Column()
+  roomUUID: string;
+
+  @Column()
+  participateUUID: string;
 }
