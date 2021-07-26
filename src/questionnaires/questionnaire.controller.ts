@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Param,
   Post,
   Put,
   Query,
@@ -14,7 +15,7 @@ import { QuestionnairesService } from './questionnaire.service';
 @Controller('questionnaires')
 @ApiTags('questionnaires')
 export class QuestionnairesController {
-  constructor(private questionService: QuestionnairesService) {}
+  constructor(private questionService: QuestionnairesService) { }
 
   @Get()
   async findAll(): Promise<Questionnaire[]> {
@@ -22,7 +23,7 @@ export class QuestionnairesController {
   }
 
   @Get(':id')
-  async findSingle(@Query('id') id: number): Promise<Questionnaire> {
+  async findSingle(@Param('id') id: number): Promise<Questionnaire> {
     return await this.questionService.findOne(id);
   }
 
@@ -35,14 +36,14 @@ export class QuestionnairesController {
 
   @Put(':id')
   async updateSingle(
-    @Query('id') id: number,
+    @Param('id') id: number,
     @Body() questionnaire: Questionnaire,
   ): Promise<Questionnaire> {
     return await this.questionService.createOne(questionnaire);
   }
 
   @Delete(':id')
-  async deleteSingle(@Query('id') id: number) {
+  async deleteSingle(@Param('id') id: number) {
     return await this.questionService.remove(id);
   }
 }

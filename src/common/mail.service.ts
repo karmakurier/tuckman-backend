@@ -1,20 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { createTransport } from 'nodemailer';
 import { MailOptions } from 'nodemailer/lib/json-transport';
+import SMTPTransport from 'nodemailer/lib/smtp-transport';
 
 @Injectable()
 export class MailService {
   smtpTransport: any;
   constructor() {
-    this.smtpTransport = createTransport({
+
+    const options: SMTPTransport.Options = {
       host: process.env.smtp_host,
-      port: process.env.smtp_port,
+      port: parseInt(process.env.smtp_port),
       secure: true,
       auth: {
         user: process.env.smtp_user,
         pass: process.env.smtp_password,
       },
-    });
+    };
+
+    this.smtpTransport = createTransport(options);
   }
 
   sendMail(text: string, to: string, subject: string, callback: any) {

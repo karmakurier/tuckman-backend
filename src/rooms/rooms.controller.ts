@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Param,
   Post,
   Put,
   Query,
@@ -19,7 +20,7 @@ export class RoomsController {
   constructor(
     private roomService: RoomsService,
     private mailService: MailService,
-  ) {}
+  ) { }
 
   @Get()
   async findAll(
@@ -37,12 +38,12 @@ export class RoomsController {
     room.participateUUID = uuidv4();
 
     // send invite mail
-    this.mailService.sendMail(
+    /*this.mailService.sendMail(
       this.mailService.generateWelcomeMail(room.roomUUID, room.participateUUID),
       room.initiatorEmail,
       'Willkommen zur Tuckman Analyse - Karmakuirer',
       (err, res) => {},
-    );
+    );*/
 
     // dont save mail
     room.initiatorEmail = 'clean';
@@ -53,14 +54,14 @@ export class RoomsController {
 
   @Put(':id')
   async updateSingle(
-    @Query('id') id: number,
+    @Param('id') id: number,
     @Body() question: Room,
   ): Promise<Room> {
     return await this.roomService.createOne(question);
   }
 
   @Delete(':id')
-  async deleteSingle(@Query('id') id: number) {
+  async deleteSingle(@Param('id') id: number) {
     return await this.roomService.remove(id);
   }
 }
