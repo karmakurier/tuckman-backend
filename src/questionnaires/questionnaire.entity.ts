@@ -14,6 +14,9 @@ export class Questionnaire {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column()
+  name: string;
+
   @ManyToMany((type) => Question)
   @JoinTable()
   questions: Question[];

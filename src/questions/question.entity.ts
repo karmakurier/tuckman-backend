@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   OneToMany,
+  ManyToMany,
 } from 'typeorm';
 import { Questionnaire } from '../questionnaires/questionnaire.entity';
 
@@ -16,6 +17,7 @@ export class Question {
 
   @Column()
   questionString: string;
+
 
   @OneToMany(
     (type) => QuestionResult,

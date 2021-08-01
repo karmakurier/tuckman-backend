@@ -8,7 +8,7 @@ export class QuestionsService {
   constructor(
     @InjectRepository(Question)
     private questionsRepository: Repository<Question>,
-  ) {}
+  ) { }
 
   findAll(): Promise<Question[]> {
     return this.questionsRepository.find();
