@@ -1,15 +1,21 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Questionnaire } from 'src/questionnaires/questionnaire.entity';
+import { QuestionnaireResult } from 'src/questionnairresults/questionnaireresult.entity';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  ManyToMany,
+  ManyToOne,
+} from 'typeorm';
 
 @Entity()
 export class Room {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  roomQuestionnaireId: string;
-
-  @Column()
-  roomResultsId: string;
+  @ManyToOne(() => Questionnaire, (questionnaire) => questionnaire.rooms)
+  roomQuestionnaire: Questionnaire;
 
   @Column()
   teamName: string;
@@ -28,4 +34,10 @@ export class Room {
 
   @Column()
   participateUUID: string;
+
+  @OneToMany(
+    (type) => QuestionnaireResult,
+    (questionnaireResult) => questionnaireResult.room,
+  )
+  questionnaireResults: QuestionnaireResult[];
 }

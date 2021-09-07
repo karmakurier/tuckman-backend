@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { Room } from 'src/rooms/room.entity';
 import {
   Entity,
   Column,
@@ -17,7 +17,10 @@ export class Questionnaire {
   @Column()
   name: string;
 
-  @ManyToMany((type) => Question)
+  @ManyToMany(() => Question)
   @JoinTable()
   questions: Question[];
+
+  @OneToMany(() => Room, (room) => room.roomQuestionnaire)
+  rooms: Room[];
 }

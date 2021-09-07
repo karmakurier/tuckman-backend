@@ -8,7 +8,7 @@ export class QuestionnairesService {
   constructor(
     @InjectRepository(Questionnaire)
     private questionsRepository: Repository<Questionnaire>,
-  ) { }
+  ) {}
 
   findAll(): Promise<Questionnaire[]> {
     return this.questionsRepository.find({ relations: ['questions'] });
@@ -29,7 +29,7 @@ export class QuestionnairesService {
   }
 
   createOne(questionnaire: Questionnaire) {
-    return this.questionsRepository.create(questionnaire);
+    return this.questionsRepository.save(questionnaire);
   }
 
   async remove(id: number): Promise<void> {

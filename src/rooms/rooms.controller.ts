@@ -13,29 +13,44 @@ import { MailService } from 'src/common/mail.service';
 import { Room } from './room.entity';
 import { RoomsService } from './rooms.service';
 import { v4 as uuidv4 } from 'uuid';
+import { CreateRoom } from './createRoom.entity';
+import { QuestionnairesService } from 'src/questionnaires/questionnaire.service';
 
 @ApiTags('rooms')
 @Controller('rooms')
 export class RoomsController {
   constructor(
     private roomService: RoomsService,
+    private questionnaireService: QuestionnairesService,
     private mailService: MailService,
-  ) { }
+  ) {}
 
   @Get()
-  async findAll(
-    @Query('roomQuestionnaireId') roomQuestionnaireId: string,
-    @Query('roomResultsId') roomResultsId: string,
-  ) {
+  async findAll(@Query('roomResultsId') roomResultsId: string) {
     //tbd: add logic to return only the room matching questionareid or resultsid!
-    return await this.roomService.findAll();
+    return await this.roomService.findRoomByRoomUUID(roomResultsId);
   }
 
   @Post()
-  async createSingle(@Body() room: Room): Promise<Room> {
+  async createSingle(@Body() room: CreateRoom): Promise<Room> {
     // inits uuids
-    room.roomUUID = uuidv4();
-    room.participateUUID = uuidv4();
+    const newRoom = new Room();
+    newRoom.roomUUID = uuidv4();
+    newRoom.participateUUID = uuidv4();
+
+    newRoom.initiatorEmail = room.initiatorEmail;
+
+    const roomQuestionnaire = await this.questionnaireService.findOne(
+      room.roomQuestionnaireId,
+    );
+    newRoom.roomQuestionnaire = roomQuestionnaire;
+    newRoom.teamName = room.teamName;
+    newRoom.notes = room.notes;
+    if (!room.expiresAt) {
+      newRoom.expiresAt = new Date(1970, 0, 0, 0);
+    } else {
+      newRoom.expiresAt = room.expiresAt;
+    }
 
     // send invite mail
     /*this.mailService.sendMail(
@@ -46,10 +61,10 @@ export class RoomsController {
     );*/
 
     // dont save mail
-    room.initiatorEmail = 'clean';
+    newRoom.initiatorEmail = 'clean';
 
     // return the created room
-    return await this.roomService.createOne(room);
+    return await this.roomService.createOne(newRoom);
   }
 
   @Put(':id')

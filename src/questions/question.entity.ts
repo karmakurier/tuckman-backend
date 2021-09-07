@@ -19,7 +19,6 @@ export class Question {
   @Column()
   questionString: string;
 
-
   @OneToMany(
     (type) => QuestionResult,
     (questionresult) => questionresult.question,

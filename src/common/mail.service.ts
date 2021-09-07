@@ -7,7 +7,6 @@ import SMTPTransport from 'nodemailer/lib/smtp-transport';
 export class MailService {
   smtpTransport: any;
   constructor() {
-
     const options: SMTPTransport.Options = {
       host: process.env.smtp_host,
       port: parseInt(process.env.smtp_port),

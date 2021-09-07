@@ -1,24 +1,40 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Room } from 'src/rooms/room.entity';
 import { Repository } from 'typeorm';
 import { QuestionnaireResult } from './questionnaireresult.entity';
+import { QuestionResult } from './questionResult.entity';
 
 @Injectable()
 export class QuestionnaireResultService {
   constructor(
     @InjectRepository(QuestionnaireResult)
     private questionsResultRepository: Repository<QuestionnaireResult>,
-  ) { }
+    @InjectRepository(QuestionResult)
+    private questionResultResultRepository: Repository<QuestionResult>,
+  ) {}
 
-  findAll(): Promise<QuestionnaireResult[]> {
-    return this.questionsResultRepository.find({ relations: ['QuestionResults'] });
+  findAllByRoom(room: Room): Promise<QuestionnaireResult[]> {
+    return this.questionsResultRepository.find({
+      relations: ['QuestionResults'],
+      where: { room: room },
+    });
   }
 
-  findOne(id: string): Promise<QuestionnaireResult> {
-    return this.questionsResultRepository.findOne(id, { relations: ['QuestionResults'] });
+  findOne(id: number): Promise<QuestionnaireResult> {
+    return this.questionsResultRepository.findOne(id, {
+      relations: ['QuestionResults'],
+    });
   }
 
-  updateOne(id: string, question: QuestionnaireResult) {
+  findOneByUUID(id: string): Promise<QuestionnaireResult> {
+    return this.questionsResultRepository.findOne({
+      relations: ['QuestionResults'],
+      where: { uuid: id },
+    });
+  }
+
+  updateOne(id: number, question: QuestionnaireResult) {
     if (this.questionsResultRepository.findOne(id)) {
       return this.questionsResultRepository.save(question);
     } else {
@@ -29,10 +45,18 @@ export class QuestionnaireResultService {
   }
 
   createOne(question: QuestionnaireResult) {
-    return this.questionsResultRepository.create(question);
+    return this.questionsResultRepository.save(question);
   }
 
   async remove(id: number): Promise<void> {
     await this.questionsResultRepository.delete(id);
+  }
+
+  async addQuestionResultToQuestionnaireResult(
+    questionResults: QuestionResult[],
+  ) {
+    for (let i = 0; i < questionResults.length; i++) {
+      await this.questionResultResultRepository.save(questionResults[i]);
+    }
   }
 }

@@ -8,17 +8,17 @@ export class QuestionsService {
   constructor(
     @InjectRepository(Question)
     private questionsRepository: Repository<Question>,
-  ) { }
+  ) {}
 
   findAll(): Promise<Question[]> {
     return this.questionsRepository.find();
   }
 
-  findOne(id: string): Promise<Question> {
+  findOne(id: number): Promise<Question> {
     return this.questionsRepository.findOne(id);
   }
 
-  updateOne(id: string, question: Question) {
+  updateOne(id: number, question: Question) {
     if (this.questionsRepository.findOne(id)) {
       return this.questionsRepository.save(question);
     } else {
@@ -29,7 +29,7 @@ export class QuestionsService {
   }
 
   createOne(question: Question) {
-    return this.questionsRepository.create(question);
+    return this.questionsRepository.save(question);
   }
 
   async remove(id: number): Promise<void> {

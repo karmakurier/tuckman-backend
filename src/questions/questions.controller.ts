@@ -15,7 +15,7 @@ import { QuestionsService } from './questions.service';
 @ApiTags('questions')
 @Controller('questions')
 export class QuestionsController {
-  constructor(private questionService: QuestionsService) { }
+  constructor(private questionService: QuestionsService) {}
 
   @Get()
   async findAll() {

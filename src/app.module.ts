@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { RoomsController } from './rooms/rooms.controller';
 import { ResultsController } from './results/results.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Question } from './questions/question.entity';
@@ -31,9 +30,9 @@ import { QuestionnaireResult } from './questionnairresults/questionnaireresult.e
     QuestionsModule,
     RoomsModule,
     QuestionnairesModule,
-    QuestionnaireResultModule
+    QuestionnaireResultModule,
   ],
   controllers: [AppController, ResultsController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}

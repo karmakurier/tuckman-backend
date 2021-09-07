@@ -11,14 +11,29 @@ export class RoomsService {
   ) {}
 
   findAll(): Promise<Room[]> {
-    return this.roomRepository.find();
+    return this.roomRepository.find({
+      /* select: [
+        'teamName',
+        'notes',
+        'expiresAt',
+        'questionnaireResults',
+        'roomQuestionnaire',
+        'id',
+      ],*/
+    });
   }
 
-  findOne(id: string): Promise<Room> {
-    return this.roomRepository.findOne(id);
+  findOne(id: number): Promise<Room> {
+    return this.roomRepository.findOne(id, {});
   }
 
-  updateOne(id: string, room: Room) {
+  findRoomByRoomUUID(roomUUID: string): Promise<Room> {
+    return this.roomRepository.findOne({
+      where: { roomUUID: roomUUID },
+    });
+  }
+
+  updateOne(id: number, room: Room) {
     if (this.roomRepository.findOne(id)) {
       return this.roomRepository.save(room);
     } else {
@@ -29,7 +44,7 @@ export class RoomsService {
   }
 
   createOne(room: Room) {
-    return this.roomRepository.create(room);
+    return this.roomRepository.save(room);
   }
 
   async remove(id: number): Promise<void> {
