@@ -23,7 +23,7 @@ export class QuestionnaireResultController {
     private questionnaireResultService: QuestionnaireResultService,
     private roomService: RoomsService,
     private questionService: QuestionsService,
-  ) {}
+  ) { }
 
   @ApiQuery({
     name: 'roomUUID',
@@ -45,7 +45,16 @@ export class QuestionnaireResultController {
     if (roomUUID) {
       const room = await this.roomService.findRoomByRoomUUID(roomUUID);
       if (room) {
-        return await this.questionnaireResultService.findAllByRoom(room);
+        const results = await this.questionnaireResultService.findAllByRoom(room);
+
+        //  todo: make this nicer!
+        results.forEach(res => {
+          res.QuestionResults.forEach(qr => {
+            qr.id = qr.question.id;
+            delete qr.question;
+          })
+        })
+        return results;
       }
     } else if (resultUUID) {
       return [await this.questionnaireResultService.findOneByUUID(resultUUID)];

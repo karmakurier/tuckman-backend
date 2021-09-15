@@ -12,24 +12,24 @@ export class QuestionnaireResultService {
     private questionsResultRepository: Repository<QuestionnaireResult>,
     @InjectRepository(QuestionResult)
     private questionResultResultRepository: Repository<QuestionResult>,
-  ) {}
+  ) { }
 
   findAllByRoom(room: Room): Promise<QuestionnaireResult[]> {
     return this.questionsResultRepository.find({
-      relations: ['QuestionResults'],
+      relations: ['QuestionResults', 'QuestionResults.question'],
       where: { room: room },
     });
   }
 
   findOne(id: number): Promise<QuestionnaireResult> {
     return this.questionsResultRepository.findOne(id, {
-      relations: ['QuestionResults'],
+      relations: ['QuestionResults', 'QuestionResults.question'],
     });
   }
 
   findOneByUUID(id: string): Promise<QuestionnaireResult> {
     return this.questionsResultRepository.findOne({
-      relations: ['QuestionResults'],
+      relations: ['QuestionResults', 'QuestionResults.question'],
       where: { uuid: id },
     });
   }
