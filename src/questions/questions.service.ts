@@ -8,14 +8,14 @@ export class QuestionsService {
   constructor(
     @InjectRepository(Question)
     private questionsRepository: Repository<Question>,
-  ) {}
+  ) { }
 
   findAll(): Promise<Question[]> {
-    return this.questionsRepository.find();
+    return this.questionsRepository.find({ relations: ['category'] });
   }
 
   findOne(id: number): Promise<Question> {
-    return this.questionsRepository.findOne(id);
+    return this.questionsRepository.findOne(id, { relations: ['category'] });
   }
 
   updateOne(id: number, question: Question) {

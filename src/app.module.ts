@@ -12,6 +12,7 @@ import { QuestionnairesModule } from './questionnaires/questionnaire.module';
 import { QuestionnaireResultModule } from './questionnairresults/questionnaireresult.module';
 import { QuestionResult } from './questionnairresults/questionResult.entity';
 import { QuestionnaireResult } from './questionnairresults/questionnaireresult.entity';
+import { QuestionCategory } from './questioncategories/questioncategory.entity';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { QuestionnaireResult } from './questionnairresults/questionnaireresult.e
         Questionnaire,
         QuestionResult,
         QuestionnaireResult,
+        QuestionCategory,
         Room,
       ],
       synchronize: true,
@@ -35,4 +37,4 @@ import { QuestionnaireResult } from './questionnairresults/questionnaireresult.e
   controllers: [AppController, ResultsController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
