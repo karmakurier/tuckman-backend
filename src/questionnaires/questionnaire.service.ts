@@ -8,14 +8,30 @@ export class QuestionnairesService {
   constructor(
     @InjectRepository(Questionnaire)
     private questionsRepository: Repository<Questionnaire>,
-  ) {}
+  ) { }
 
   findAll(): Promise<Questionnaire[]> {
-    return this.questionsRepository.find({ relations: ['questions'] });
+    return this.questionsRepository.find({
+      join: {
+        alias: "questionnaire",
+        leftJoinAndSelect: {
+          "questions": "questionnaire.questions",
+          "category": "questions.category"
+        }
+      }
+    });
   }
 
   findOne(id: number): Promise<Questionnaire> {
-    return this.questionsRepository.findOne(id, { relations: ['questions'] });
+    return this.questionsRepository.findOne(id, {
+      join: {
+        alias: "questionnaire",
+        leftJoinAndSelect: {
+          "questions": "questionnaire.questions",
+          "category": "questions.category"
+        }
+      }
+    });
   }
 
   updateOne(id: string, questionnaire: Questionnaire) {

@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { QuestionCategory } from 'src/questioncategories/questioncategory.entity';
 import { QuestionResult } from 'src/questionnairresults/questionResult.entity';
 
 import {
@@ -7,7 +8,6 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   OneToMany,
-  ManyToMany,
 } from 'typeorm';
 import { Questionnaire } from '../questionnaires/questionnaire.entity';
 
@@ -18,6 +18,12 @@ export class Question {
 
   @Column()
   questionString: string;
+
+  @ManyToOne(
+    (type) => QuestionCategory,
+    (category) => category.questions
+  )
+  category: QuestionCategory;
 
   @OneToMany(
     (type) => QuestionResult,

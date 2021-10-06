@@ -71,7 +71,7 @@ export class QuestionnaireResultController {
     const newQuestionnaireResult = new QuestionnaireResult();
     newQuestionnaireResult.createdAt = new Date();
 
-    const room = await this.roomService.findOne(question.roomId);
+    const room = await this.roomService.findRoomByParticipateId(question.participateId);
 
     if (room.participateUUID === participateUUID) {
       newQuestionnaireResult.room = room;

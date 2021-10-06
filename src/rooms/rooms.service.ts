@@ -8,7 +8,7 @@ export class RoomsService {
   constructor(
     @InjectRepository(Room)
     private roomRepository: Repository<Room>,
-  ) {}
+  ) { }
 
   findAll(): Promise<Room[]> {
     return this.roomRepository.find({
@@ -30,6 +30,12 @@ export class RoomsService {
   findRoomByRoomUUID(roomUUID: string): Promise<Room> {
     return this.roomRepository.findOne({
       where: { roomUUID: roomUUID },
+    });
+  }
+
+  findRoomByParticipateId(participateId: string): Promise<Room> {
+    return this.roomRepository.findOne({
+      where: { participateUUID: participateId },
     });
   }
 
