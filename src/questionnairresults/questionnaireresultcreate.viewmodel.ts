@@ -1,4 +1,4 @@
-import { QuestionResultCreate } from './questionResultCreate.entity';
+import { QuestionResultCreate } from './questionResultCreate.viewmodel';
 
 export class QuestionnaireResultCreate {
   participateId: string;

@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  tuckmanbackend:
+    container_name: tuckman.backend
+    image: tuckmanBE:latest
+    ports:
+      - 3000:3000
+    networks:
+      - tuckman.network
+    depends_on:
+      - postgres
+  postgres:
+    container_name: postgres
+    image: postgres:12
+    networks:
+      - tuckman.network
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_DB: ${DB_DATABASE_NAME}
+      PG_DATA: /var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+networks:
+  tuckman.network:
+volumes:
+  pgdata:
