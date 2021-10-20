@@ -23,7 +23,7 @@ export class RoomsController {
     private roomService: RoomsService,
     private questionnaireService: QuestionnairesService,
     private mailService: MailService,
-  ) {}
+  ) { }
 
   @Get()
   async findAll(@Query('roomResultsId') roomResultsId: string) {
@@ -67,7 +67,7 @@ export class RoomsController {
     return await this.roomService.createOne(newRoom);
   }
 
-  @Put(':id')
+  /*@Put(':id')
   async updateSingle(
     @Param('id') id: number,
     @Body() question: Room,
@@ -78,5 +78,5 @@ export class RoomsController {
   @Delete(':id')
   async deleteSingle(@Param('id') id: number) {
     return await this.roomService.remove(id);
-  }
+  }*/
 }

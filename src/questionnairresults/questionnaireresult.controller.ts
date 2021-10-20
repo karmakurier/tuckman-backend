@@ -104,8 +104,8 @@ export class QuestionnaireResultController {
     }
   }
 
-  @Delete(':id')
+  /*@Delete(':id')
   async deleteSingle(@Param('id') id: number) {
     return await this.questionnaireResultService.remove(id);
-  }
+  }*/
 }

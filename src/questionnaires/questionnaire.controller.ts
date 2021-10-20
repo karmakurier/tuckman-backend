@@ -15,7 +15,7 @@ import { QuestionnairesService } from './questionnaire.service';
 @Controller('questionnaires')
 @ApiTags('questionnaires')
 export class QuestionnairesController {
-  constructor(private questionService: QuestionnairesService) {}
+  constructor(private questionService: QuestionnairesService) { }
 
   @Get()
   async findAll(): Promise<Questionnaire[]> {
@@ -27,7 +27,7 @@ export class QuestionnairesController {
     return await this.questionService.findOne(id);
   }
 
-  @Post()
+  /*@Post()
   async createSingle(
     @Body() questionnaire: Questionnaire,
   ): Promise<Questionnaire> {
@@ -46,4 +46,5 @@ export class QuestionnairesController {
   async deleteSingle(@Param('id') id: number) {
     return await this.questionService.remove(id);
   }
+  */
 }

@@ -15,14 +15,14 @@ import { QuestionsService } from './questions.service';
 @ApiTags('questions')
 @Controller('questions')
 export class QuestionsController {
-  constructor(private questionService: QuestionsService) {}
+  constructor(private questionService: QuestionsService) { }
 
   @Get()
   async findAll() {
     return await this.questionService.findAll();
   }
 
-  @Post()
+  /*@Post()
   async createSingle(@Body() question: Question): Promise<Question> {
     return await this.questionService.createOne(question);
   }
@@ -38,5 +38,5 @@ export class QuestionsController {
   @Delete(':id')
   async deleteSingle(@Param('id') id: number) {
     return await this.questionService.remove(id);
-  }
+  }*/
 }
