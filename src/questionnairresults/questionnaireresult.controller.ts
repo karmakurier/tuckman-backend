@@ -12,7 +12,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { QuestionsService } from 'src/questions/questions.service';
 import { RoomsService } from 'src/rooms/rooms.service';
 import { QuestionnaireResult } from './questionnaireresult.entity';
-import { QuestionnaireResultCreate } from './questionnaireresultcreate.viewmodel';
+import { QuestionnaireResultCreate } from './questionnaireresultcreate.entity';
 import { QuestionResult } from './questionResult.entity';
 import { QuestionnaireResultService } from './questions.service';
 

@@ -4,4 +4,5 @@ export class CreateRoom {
   notes: string;
   initiatorEmail: string;
   expiresAt: Date;
+  hcaptchaValue: string;
 }

@@ -27,6 +27,7 @@
     "@nestjs/swagger": "^5.1.0",
     "@nestjs/typeorm": "^8.0.2",
     "@types/nodemailer": "^6.4.4",
+    "hcaptcha": "^0.1.0",
     "nodemailer": "^6.6.3",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",

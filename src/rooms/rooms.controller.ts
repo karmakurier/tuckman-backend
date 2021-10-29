@@ -15,6 +15,7 @@ import { RoomsService } from './rooms.service';
 import { v4 as uuidv4 } from 'uuid';
 import { CreateRoom } from './createRoom.entity';
 import { QuestionnairesService } from 'src/questionnaires/questionnaire.service';
+import { verify } from 'hcaptcha';
 
 @ApiTags('rooms')
 @Controller('rooms')
@@ -33,38 +34,45 @@ export class RoomsController {
 
   @Post()
   async createSingle(@Body() room: CreateRoom): Promise<Room> {
-    // inits uuids
-    const newRoom = new Room();
-    newRoom.roomUUID = uuidv4();
-    newRoom.participateUUID = uuidv4();
 
-    newRoom.initiatorEmail = room.initiatorEmail;
+    let captchaResult = await verify('0x4Dbb3234Aa6549F304386ebc83f7b227936D8a30', room.hcaptchaValue);
+    if (captchaResult.success) {
+      // inits uuids
+      const newRoom = new Room();
+      newRoom.roomUUID = uuidv4();
+      newRoom.participateUUID = uuidv4();
 
-    const roomQuestionnaire = await this.questionnaireService.findOne(
-      room.roomQuestionnaireId,
-    );
-    newRoom.roomQuestionnaire = roomQuestionnaire;
-    newRoom.teamName = room.teamName;
-    newRoom.notes = room.notes;
-    if (!room.expiresAt) {
-      newRoom.expiresAt = new Date(1970, 0, 0, 0);
+      newRoom.initiatorEmail = room.initiatorEmail;
+
+      const roomQuestionnaire = await this.questionnaireService.findOne(
+        room.roomQuestionnaireId,
+      );
+      newRoom.roomQuestionnaire = roomQuestionnaire;
+      newRoom.teamName = room.teamName;
+      newRoom.notes = room.notes;
+      if (!room.expiresAt) {
+        newRoom.expiresAt = new Date(1970, 0, 0, 0);
+      } else {
+        newRoom.expiresAt = room.expiresAt;
+      }
+
+      // send invite mail
+      /*this.mailService.sendMail(
+        this.mailService.generateWelcomeMail(room.roomUUID, room.participateUUID),
+        room.initiatorEmail,
+        'Willkommen zur Tuckman Analyse - Karmakuirer',
+        (err, res) => {},
+      );*/
+
+      // dont save mail
+      newRoom.initiatorEmail = 'clean';
+
+      // return the created room
+      return await this.roomService.createOne(newRoom);
     } else {
-      newRoom.expiresAt = room.expiresAt;
+      return null;
     }
 
-    // send invite mail
-    /*this.mailService.sendMail(
-      this.mailService.generateWelcomeMail(room.roomUUID, room.participateUUID),
-      room.initiatorEmail,
-      'Willkommen zur Tuckman Analyse - Karmakuirer',
-      (err, res) => {},
-    );*/
-
-    // dont save mail
-    newRoom.initiatorEmail = 'clean';
-
-    // return the created room
-    return await this.roomService.createOne(newRoom);
   }
 
   /*@Put(':id')
