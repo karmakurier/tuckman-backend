@@ -16,19 +16,7 @@ import { QuestionCategory } from './questioncategories/questioncategory.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'sqlite',
-      database: './db.sqlite',
-      entities: [
-        Question,
-        Questionnaire,
-        QuestionResult,
-        QuestionnaireResult,
-        QuestionCategory,
-        Room,
-      ],
-      synchronize: true,
-    }),
+    TypeOrmModule.forRoot(),
     QuestionsModule,
     RoomsModule,
     QuestionnairesModule,
