@@ -6,7 +6,12 @@
   "password": "root",
   "database": "test",
   "entities": [
-    "dist/**/*.entity{.ts,.js}"
+    "dist/questions/question.entity.js",
+    "dist/questionnaires/questionnaire.entity.js",
+    "dist/questionnairresults/questionResult.entity.js",
+    "dist/questionnairresults/questionnaireresult.entity.js",
+    "dist/rooms/room.entity.js",
+    "dist/questioncategories/questioncategory.entity.js"
   ],
   "synchronize": true
 }
