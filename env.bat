@@ -1,0 +1,4 @@
+set TYPEORM_TYPE=sqlite
+set TYPEORM_PORT=0
+set TYPEORM_DATABASE=db.sqlite
+set ENTITYPATH=dist/

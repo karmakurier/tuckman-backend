@@ -3,7 +3,14 @@ version: '3'
 services:
   tuckmanbackend:
     container_name: tuckman.backend
-    image: tuckmanBE:latest
+    image: tuckman.backend:latest
+    environment:
+      TYPEORM_TYPE: postgres
+      TYPEORM_PORT: 5432
+      TYPEORM_HOST: postgres
+      TYPEORM_DATABASE: ${DB_DATABASE_NAME}
+      TYPEORM_USERNAME: ${DB_USERNAME}
+      TYPEORM_PASSWORD: ${DB_PASSWORD}
     ports:
       - 3000:3000
     networks:
