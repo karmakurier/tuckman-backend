@@ -8,7 +8,7 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { MailService } from 'src/common/mail.service';
 import { Room } from './room.entity';
 import { RoomsService } from './rooms.service';
@@ -16,6 +16,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { CreateRoom } from './createRoom.entity';
 import { QuestionnairesService } from 'src/questionnaires/questionnaire.service';
 import { verify } from 'hcaptcha';
+import { ParticipateRoom } from './roomParticipate.entity';
 
 @ApiTags('rooms')
 @Controller('rooms')
@@ -27,15 +28,21 @@ export class RoomsController {
   ) { }
 
   @Get()
-  async findAll(@Query('roomResultsId') roomResultsId: string) {
-    //tbd: add logic to return only the room matching questionareid or resultsid!
+  async findAll(
+    @Query('roomResultsId') roomResultsId: string) {
     return await this.roomService.findRoomByRoomUUID(roomResultsId);
+  }
+
+  @Get('participate')
+  async findForParticipant(
+    @Query('participateUUID') participateUUID: string,): Promise<ParticipateRoom> {
+    return await this.roomService.findRoomByParticipateUUID(participateUUID);
   }
 
   @Post()
   async createSingle(@Body() room: CreateRoom): Promise<Room> {
 
-    let captchaResult = await verify('0x4Dbb3234Aa6549F304386ebc83f7b227936D8a30', room.hcaptchaValue);
+    const captchaResult = await verify(process.env.CAPTCHAKEY, room.hcaptchaValue);
     if (captchaResult.success) {
       // inits uuids
       const newRoom = new Room();
@@ -49,12 +56,19 @@ export class RoomsController {
       );
       newRoom.roomQuestionnaire = roomQuestionnaire;
       newRoom.teamName = room.teamName;
-      newRoom.notes = room.notes;
+      if (room.notes) {
+        newRoom.notes = room.notes;
+      } else {
+        newRoom.notes = "";
+      }
+
       if (!room.expiresAt) {
         newRoom.expiresAt = new Date(1970, 0, 0, 0);
       } else {
         newRoom.expiresAt = room.expiresAt;
       }
+
+      console.log(newRoom)
 
       // send invite mail
       /*this.mailService.sendMail(

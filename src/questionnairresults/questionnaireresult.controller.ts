@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   Post,
   Query,
@@ -15,6 +17,7 @@ import { QuestionnaireResult } from './questionnaireresult.entity';
 import { QuestionnaireResultCreate } from './questionnaireresultcreate.entity';
 import { QuestionResult } from './questionResult.entity';
 import { QuestionnaireResultService } from './questions.service';
+import { verify } from 'hcaptcha';
 
 @ApiTags('questionnaireresult')
 @Controller('questionnaireresult')
@@ -68,39 +71,52 @@ export class QuestionnaireResultController {
     @Body() question: QuestionnaireResultCreate,
     @Query('participateUUID') participateUUID: string,
   ): Promise<QuestionnaireResult> {
-    const newQuestionnaireResult = new QuestionnaireResult();
-    newQuestionnaireResult.createdAt = new Date();
 
-    const room = await this.roomService.findRoomByParticipateId(question.participateId);
+    const captchaResult = await verify(process.env.CAPTCHAKEY, question.hcaptchaValue);
+    if (captchaResult.success) {
 
-    if (room.participateUUID === participateUUID) {
-      newQuestionnaireResult.room = room;
-      newQuestionnaireResult.uuid = uuidv4();
-      newQuestionnaireResult.QuestionResults = [];
 
-      const createdQR = await this.questionnaireResultService.createOne(
-        newQuestionnaireResult,
-      );
+      const newQuestionnaireResult = new QuestionnaireResult();
+      newQuestionnaireResult.createdAt = new Date();
 
-      const questionResultsToCreate = [];
-      for (let i = 0; i < question.QuestionResults.length; i++) {
-        const newQuestionResult = new QuestionResult();
-        const quest = await this.questionService.findOne(
-          question.QuestionResults[i].questionId,
+      const room = await this.roomService.findRoomByParticipateId(question.participateId);
+
+      if (room?.participateUUID === participateUUID) {
+        newQuestionnaireResult.room = room;
+        newQuestionnaireResult.uuid = uuidv4();
+        newQuestionnaireResult.QuestionResults = [];
+
+        const createdQR = await this.questionnaireResultService.createOne(
+          newQuestionnaireResult,
         );
-        newQuestionResult.answer = question.QuestionResults[i].answer;
-        newQuestionResult.question = quest;
-        newQuestionResult.questionnair = createdQR;
-        questionResultsToCreate.push(newQuestionResult);
+
+        const questionResultsToCreate = [];
+        for (let i = 0; i < question.QuestionResults.length; i++) {
+          const newQuestionResult = new QuestionResult();
+          const quest = await this.questionService.findOne(
+            question.QuestionResults[i].questionId,
+          );
+          newQuestionResult.answer = question.QuestionResults[i].answer;
+          newQuestionResult.question = quest;
+          newQuestionResult.questionnair = createdQR;
+          questionResultsToCreate.push(newQuestionResult);
+        }
+
+        await this.questionnaireResultService.addQuestionResultToQuestionnaireResult(
+          questionResultsToCreate,
+        );
+
+        return await this.questionnaireResultService.findOne(createdQR.id);
+      } else {
+        throw new HttpException({
+          status: HttpStatus.NOT_FOUND,
+        }, HttpStatus.NOT_FOUND)
       }
-
-      await this.questionnaireResultService.addQuestionResultToQuestionnaireResult(
-        questionResultsToCreate,
-      );
-
-      return await this.questionnaireResultService.findOne(createdQR.id);
     } else {
-      return null;
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: 'Invalid captcha'
+      }, HttpStatus.BAD_REQUEST)
     }
   }
 
